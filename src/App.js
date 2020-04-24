@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { submitForm } from './actions';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Form from './components/Form';
+import TaskList from './components/TaskList';
+
+class App extends Component {
+  handleSubmit = form => {
+    const { dispatch } = this.props;
+    dispatch(submitForm(form));
+  };
+
+  render() {
+    const { formData } = this.props;
+    return (
+      <Fragment>
+        <Form onHandleSubmit={this.handleSubmit}/>
+        <TaskList formData={formData}/>
+      </Fragment>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  formData: state.formReducer.formData
+});
+
+export default connect(mapStateToProps)(App);
